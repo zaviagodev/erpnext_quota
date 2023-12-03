@@ -1,15 +1,5 @@
-## Erpnext Quota
+## ERP Quota
 
-App to manage ERPNext User, Company and Space limitations
-
-#### How to Install
-```
-bench get-app https://github.com/ahmadpak/erpnext_quota
-bench --site *site_name* install-app erpnext_quota
-```
-### Usage
-Install the app. It will add quota config in the site_config.json file
-Contents will look similar:
 
 ```json
 {
@@ -42,20 +32,3 @@ Contents will look similar:
   "employee_self_service": 20
 }
 ```
-
-Manually change the default values to change the limits. 
-Default is:
-- 5 active users not including website users
-- 2 companies
-
-quota.json file will automatically get updated for any 
-
-To view the Usage info, find it in Settings Module or search 'Usage Info' in the awesome bar
-![Database Limit Screenshot](images/database_limit.png)
-![Files Limit Screenshot](images/files_space_limit.png)
-![User Limit Screenshot](images/user_limit.png)
-![Login Limit Screenshot](images/login_validity.gif)
-![Usage Info Screenshot](images/usage_info_doc.png)
-
-#### License
-MIT
