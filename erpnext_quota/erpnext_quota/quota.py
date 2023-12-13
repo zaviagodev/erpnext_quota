@@ -4,7 +4,6 @@ import frappe
 from frappe import _
 import json
 
-
 def document_limit(doc, event):
     doctype_name = doc.doctype
     limit = frappe.get_site_config()['quota']
