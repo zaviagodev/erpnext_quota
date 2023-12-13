@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 app_name = "erpnext_quota"
 app_title = "Erpnext Quota"
 app_publisher = "Havenir Solutions Private Limited"
@@ -53,7 +52,6 @@ app_license = "MIT"
 # Installation
 # ------------
 
-before_install = "erpnext_quota.install.before_install"
 # after_install = "erpnext_quota.install.after_install"
 
 # Desk Notifications
@@ -86,33 +84,13 @@ before_install = "erpnext_quota.install.before_install"
 # }
 # }
 
-on_login = 'erpnext_quota.events.auth.successful_login'
-
 doc_events = {
-    'User': {
-        'validate': 'erpnext_quota.erpnext_quota.quota.user_limit',
-        'on_update': 'erpnext_quota.erpnext_quota.quota.user_limit'
-    },
-    'Company': {
-        'validate': 'erpnext_quota.erpnext_quota.quota.company_limit',
-        'on_update': 'erpnext_quota.erpnext_quota.quota.company_limit'
-    },
     '*': {
-        'on_submit': 'erpnext_quota.erpnext_quota.quota.db_space_limit',
+        'on_submit': 'erpnext_quota.erpnext_quota.quota.document_limit',
         'before_insert': 'erpnext_quota.erpnext_quota.quota.document_limit'
-    },
-    'File': {
-        'validate': 'erpnext_quota.erpnext_quota.quota.files_space_limit'
     }
 }
-# Scheduled Tasks
-# ---------------
 
-scheduler_events = {
-    "daily": [
-        "erpnext_quota.tasks.daily"
-    ]
-}
 
 # Testing
 # -------
