@@ -86,8 +86,17 @@ app_license = "MIT"
 
 doc_events = {
     '*': {
+        'before_insert' : 'erpnext_quota.erpnext_quota.quota.document_limit',
         'on_submit': 'erpnext_quota.erpnext_quota.quota.document_limit',
         'before_insert': 'erpnext_quota.erpnext_quota.quota.document_limit'
+    }
+}
+
+scheduler_events = {
+    "cron": {
+        "0 * * * *": [  # Every hour at minute 0
+            "erpnext_quota.erpnext_quota.quota.update_site_config_from_parent"
+        ]
     }
 }
 
