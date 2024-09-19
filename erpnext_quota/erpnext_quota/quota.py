@@ -44,14 +44,15 @@ def update_config_file(site_name=None):
 def document_limit(doc, event):
     doctype_name = doc.doctype
     doc_list = frappe.get_site_config().get('quota')
-    doc_list = json.loads(doc_list)
     if doc_list:
-        for item in doc_list:
-            if doctype_name in item:
-                doc_count = item[doctype_name]
-                count = frappe.db.count(doctype_name)
-                if count > doc_count:
-                    frappe.throw(f"You have exceeded the maximum limit of {doctype_name}. Limit: {doc_count}, Current Count: {count}.")
+        doc_list = json.loads(doc_list)
+        if doc_list:
+            for item in doc_list:
+                if doctype_name in item:
+                    doc_count = item[doctype_name]
+                    count = frappe.db.count(doctype_name)
+                    if count > doc_count:
+                        frappe.throw(f"You have exceeded the maximum limit of {doctype_name}. Limit: {doc_count}, Current Count: {count}.")
                     
             
 @frappe.whitelist(allow_guest=True)
