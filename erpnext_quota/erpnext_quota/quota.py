@@ -5,7 +5,15 @@ import requests
 from datetime import datetime, timedelta
 from frappe.utils import get_site_name
 
-def update_site_config_from_parent():
+
+def update_site_config_cron():
+    site_name = frappe.local.site  # Get the current site name
+    frappe.enqueue("erpnext_quota.erpnext_quota.quota.update_site_config_from_parent", queue="long", timeout=1000, site_name=site_name)
+
+def update_site_config_from_parent(site_name=None):
+    if not site_name:
+        site_name = frappe.local.site  # Fallback to the current site name if not passed
+    
     last_run = frappe.get_site_config().get('last_run_time')
     if last_run:
         last_run_time = datetime.strptime(last_run, '%Y-%m-%d %H:%M:%S')
@@ -16,17 +24,13 @@ def update_site_config_from_parent():
 
     # Check if 24 hours have passed
     if current_time - last_run_time >= timedelta(hours=24):
-        update_config_file()
-        frappe.get_site_config().update({
-            'last_run_time': current_time.strftime('%Y-%m-%d %H:%M:%S')
-        })
-        frappe.get_site_config().save()
+        update_config_file(site_name)
+        update_site_config('last_run_time', current_time.strftime('%Y-%m-%d %H:%M:%S'))
     else:
         pass
 
-def update_config_file():
-    site_name = get_site_name(frappe.local.request.host)
-    url = "https://hosting.zaviago.com/api/method/press.api.billing.get_quota?domain="+site_name
+def update_config_file(site_name):
+    url = "https://hosting.zaviago.com/api/method/press.api.billing.get_quota?domain=" + site_name
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
