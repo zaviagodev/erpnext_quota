@@ -5,10 +5,8 @@ import requests
 from datetime import datetime, timedelta
 from frappe.utils import get_site_name
 
-
 def update_site_config_from_parent():
     last_run = frappe.get_site_config().get('last_run_time')
-    
     if last_run:
         last_run_time = datetime.strptime(last_run, '%Y-%m-%d %H:%M:%S')
     else:
@@ -39,6 +37,7 @@ def update_config_file():
 def document_limit(doc, event):
     doctype_name = doc.doctype
     doc_list = frappe.get_site_config().get('quota')
+    doc_list = json.loads(doc_list)
     if doc_list:
         for item in doc_list:
             if doctype_name in item:
@@ -52,7 +51,7 @@ def document_limit(doc, event):
 def get_list_of_usage():
     usage_counts = []
     doc_list = frappe.get_site_config().get('quota', [])
-
+    doc_list = json.loads(doc_list)
     # Count documents for each doctype in doc_list
     for doctype_dict in doc_list:
         if isinstance(doctype_dict, dict):
