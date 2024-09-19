@@ -5,7 +5,6 @@ import requests
 from datetime import datetime, timedelta
 from frappe.utils import get_site_name
 
-
 def update_site_config_cron():
     site_name = frappe.local.site  # Get the current site name
     frappe.enqueue("erpnext_quota.erpnext_quota.quota.update_site_config_from_parent", queue="long", timeout=1000, site_name=site_name)
@@ -29,14 +28,18 @@ def update_site_config_from_parent(site_name=None):
     else:
         pass
 
-def update_config_file(site_name):
+def update_config_file(site_name=None):
+    if not site_name:
+        site_name = frappe.local.site
     url = "https://hosting.zaviago.com/api/method/press.api.billing.get_quota?domain=" + site_name
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         quota_data = data.get('message', [])
-        update_site_config('quota', quota_data)
+        quota_data_json = json.dumps(quota_data)
+        update_site_config('quota', quota_data_json)
         return quota_data
+    
 
 def document_limit(doc, event):
     doctype_name = doc.doctype
